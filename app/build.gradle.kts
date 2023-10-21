@@ -89,4 +89,10 @@ dependencies {
 
     // Live Data
     implementation ("androidx.compose.runtime:runtime-livedata:1.0.0-beta01")
+
+    // SplashAPI
+    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
+
 }
