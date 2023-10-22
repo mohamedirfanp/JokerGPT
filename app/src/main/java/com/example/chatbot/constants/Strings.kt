@@ -6,6 +6,11 @@ object Strings {
     const val landingSupportText =
         "Joker is the most friendly and fast chatbot ever made on Internet"
 
+    // Home page
+    const val homeHeaderText = "How may I help you today?"
+    const val homeChatWithBot = "Chat with Bot"
+    const val homeTalkWithBot = "Talk with Bot"
+
     // Common
     const val getStarted = "Get Started"
 

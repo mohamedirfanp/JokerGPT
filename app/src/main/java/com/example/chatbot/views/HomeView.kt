@@ -34,10 +34,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.chatbot.R
 import com.example.chatbot.components.CardComponent
 import com.example.chatbot.components.HistoryCardTile
+import com.example.chatbot.constants.Screens
+import com.example.chatbot.constants.Strings
 import com.example.chatbot.models.user.UserData
 
 data class HistoryCardData(
@@ -46,7 +49,7 @@ data class HistoryCardData(
 )
 
 @Composable
-fun HomeView(userData: UserData?, onSignOut: () -> Unit) {
+fun HomeView(userData: UserData?, navController: NavHostController, onSignOut: () -> Unit) {
 
     val historyDataList = listOf(
         HistoryCardData("chat", "Chat Title 1 asodjaosmd osdaij "),
@@ -104,7 +107,7 @@ fun HomeView(userData: UserData?, onSignOut: () -> Unit) {
                     onDismissRequest = { expanded = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Sign Out") },
+                        text = { Text("Sign Out", fontSize = 18.sp) },
                         onClick = { onSignOut() }
                     )
                 }
@@ -114,19 +117,25 @@ fun HomeView(userData: UserData?, onSignOut: () -> Unit) {
         Column(verticalArrangement = Arrangement.spacedBy(25.dp)) {
 
             Text(
-                text = "How may I Help You Today ?",
+                text = Strings.homeHeaderText,
                 style = MaterialTheme.typography.labelMedium,
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                CardComponent(R.drawable.speaking, "Talk with Bot")
-                CardComponent(R.drawable.chat, "Chat with Bot")
+                CardComponent(R.drawable.chat, Strings.homeChatWithBot) {
+                    navController.navigate(Screens.chat)
+                }
+                CardComponent(R.drawable.speaking, Strings.homeTalkWithBot) {
+
+                }
             }
         }
+
         Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +158,6 @@ fun HomeView(userData: UserData?, onSignOut: () -> Unit) {
                     )
                 }
             }
-//        HistoryCardTile("chat", "Lorem is testing the where is cut")
             LazyColumn(verticalArrangement = Arrangement.spacedBy(15.dp))
             {
                 items(historyDataList)

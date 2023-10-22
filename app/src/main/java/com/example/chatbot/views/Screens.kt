@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.chatbot.constants.Screens
 import com.example.chatbot.util.GoogleAuthUiClient
 import com.example.chatbot.viewmodels.SignInViewModel
 import kotlinx.coroutines.launch
@@ -26,10 +27,11 @@ fun Screens(
     applicationContext: Context
 ) {
     val scope = rememberCoroutineScope()
-    NavHost(navController = navController, startDestination = "landing") {
-        composable(route = "home") {
+    NavHost(navController = navController, startDestination = Screens.landing) {
+        composable(route = Screens.home) {
             HomeView(
                 userData = googleAuthUiClient.getSignedInUser(),
+                navController,
                 onSignOut = {
                     scope.launch {
                         googleAuthUiClient.signOut()
@@ -45,13 +47,17 @@ fun Screens(
             )
         }
 
-        composable(route = "landing") {
+        composable(route = Screens.chat) {
+            Chat()
+        }
+
+        composable(route = Screens.landing) {
             val signInViewModel = viewModel<SignInViewModel>()
             val state by signInViewModel.state.collectAsStateWithLifecycle()
 
             LaunchedEffect(key1 = Unit) {
                 if (googleAuthUiClient.getSignedInUser() != null) {
-                    navController.navigate("home")
+                    navController.navigate(Screens.home)
                 }
             }
 
@@ -77,7 +83,7 @@ fun Screens(
                         Toast.LENGTH_LONG
                     ).show()
 
-                    navController.navigate("profile")
+                    navController.navigate(Screens.home)
                     signInViewModel.resetState()
                 }
             }
