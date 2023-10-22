@@ -17,4 +17,8 @@ object Strings {
     // Web Client ID
     const val webClientId =
         "51643995684-05ilhrh04f5h7u35f15j03tan3eo87s9.apps.googleusercontent.com"
+
+    // Constant Messages
+    val staticMessage: List<String> = listOf("Tell me a Poem", "Tell me a Joke", "What is android?")
+
 }

@@ -19,10 +19,16 @@ class ChatViewModel @Inject constructor(private val repository: Repository) : Vi
 
     val chats = MutableLiveData<MutableList<ChatMessage>>()
 
+
     var message: String by mutableStateOf("")
 
     init {
         chats.value = ArrayList()
+//        chats.value?.add(ChatMessage("This is a random message with more than 30 characters.", "user"))
+//        chats.value?.add(ChatMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "assistance"))
+//        chats.value?.add(ChatMessage("Random text for the third message. It's longer than 30 characters for sure.", "user"))
+//        chats.value?.add(ChatMessage("Assistance message with over 30 characters in its content. Just for testing.", "assistance"))
+
     }
 
     fun getChatResponse() {

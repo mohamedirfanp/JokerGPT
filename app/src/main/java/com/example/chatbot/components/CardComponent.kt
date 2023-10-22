@@ -82,7 +82,7 @@ fun CardComponent(imageResource: Int, title: String, onCardClick: () -> Unit) {
             fontSize = 30.sp,
             fontWeight = FontWeight(350),
             color = Color.White,
-            lineHeight = 30.sp,
+            lineHeight = 35.sp,
             modifier = Modifier.padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
         )
     }

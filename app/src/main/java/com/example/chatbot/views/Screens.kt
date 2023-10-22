@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -17,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.chatbot.constants.Screens
 import com.example.chatbot.util.GoogleAuthUiClient
+import com.example.chatbot.viewmodels.ChatViewModel
 import com.example.chatbot.viewmodels.SignInViewModel
 import kotlinx.coroutines.launch
 
@@ -41,14 +43,15 @@ fun Screens(
                             Toast.LENGTH_LONG
                         ).show()
 
-                        navController.popBackStack()
+                        navController.navigate(Screens.landing)
                     }
                 }
             )
         }
 
         composable(route = Screens.chat) {
-            Chat()
+            val chatViewModel = hiltViewModel<ChatViewModel>()
+            Chat(chatViewModel, navController)
         }
 
         composable(route = Screens.landing) {
