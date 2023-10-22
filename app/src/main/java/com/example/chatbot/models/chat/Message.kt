@@ -1,4 +1,4 @@
-package com.example.chatbot.models
+package com.example.chatbot.models.chat
 
 data class Message(
     val content: String,

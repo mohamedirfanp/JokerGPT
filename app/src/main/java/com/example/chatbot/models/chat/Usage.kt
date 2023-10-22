@@ -1,4 +1,4 @@
-package com.example.chatbot.models
+package com.example.chatbot.models.chat
 
 data class Usage(
     val completion_tokens: Int,
