@@ -1,6 +1,7 @@
 package com.example.chatbot.models.chat
 
 import com.example.chatbot.constants.Role
+import com.example.chatbot.models.remote.ChatMessageFirestore
 
 data class ChatMessage(
     val content: String,
@@ -13,3 +14,12 @@ data class ChatMessage(
         )
     }
 }
+
+fun ChatMessage.toChatMessageFireStore() : ChatMessageFirestore {
+    return ChatMessageFirestore(
+        content = content,
+        role = role,
+        conversationId = null
+    )
+}
+

@@ -21,4 +21,7 @@ object Strings {
     // Constant Messages
     val staticMessage: List<String> = listOf("Tell me a Poem", "Tell me a Joke", "What is android?")
 
+
+    // Route Constant
+    val PARAM_CONVERSATION_ID = "conversationId"
 }

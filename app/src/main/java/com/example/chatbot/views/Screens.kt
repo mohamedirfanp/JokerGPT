@@ -17,9 +17,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.chatbot.constants.Screens
 import com.example.chatbot.util.GoogleAuthUiClient
 import com.example.chatbot.viewmodels.ChatViewModel
+import com.example.chatbot.viewmodels.GlobalViewModel
 import com.example.chatbot.viewmodels.SignInViewModel
 import kotlinx.coroutines.launch
 
@@ -30,11 +32,14 @@ fun Screens(
     applicationContext: Context
 ) {
     val scope = rememberCoroutineScope()
-    NavHost(navController = navController, startDestination = Screens.chat) {
+    val chatViewModel = hiltViewModel<ChatViewModel>()
+    val globalViewModel = viewModel<GlobalViewModel>()
+    NavHost(navController = navController, startDestination = Screens.landing) {
         composable(route = Screens.home) {
             HomeView(
                 userData = googleAuthUiClient.getSignedInUser(),
                 navController,
+                globalViewModel = globalViewModel,
                 onSignOut = {
                     scope.launch {
                         googleAuthUiClient.signOut()
@@ -50,11 +55,25 @@ fun Screens(
             )
         }
 
-        composable(route = Screens.chat) {
-            val chatViewModel = hiltViewModel<ChatViewModel>()
-            val conversation = chatViewModel.chats.collectAsState()
+        composable(route = Screens.chat + "/{conversationId}",
+                ) {
 
-            Chat(chatViewModel, conversation.value, navController,googleAuthUiClient.getSignedInUser())
+            val conversation = chatViewModel.chats.collectAsState()
+            val conversationId = it.arguments?.getString("conversationId")
+
+
+            Chat(chatViewModel, conversation.value, navController,googleAuthUiClient.getSignedInUser(), conversationId)
+        }
+
+        composable(route = Screens.chat){
+            val conversation = chatViewModel.chats.collectAsState()
+            Chat(
+                chatViewModel = chatViewModel,
+                conversation = conversation.value,
+                navController = navController,
+                userData = googleAuthUiClient.getSignedInUser(),
+                conversationId = null
+            )
         }
 
         composable(route = Screens.landing) {

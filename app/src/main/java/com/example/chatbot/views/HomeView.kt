@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,22 +43,13 @@ import com.example.chatbot.components.HistoryCardTile
 import com.example.chatbot.constants.Screens
 import com.example.chatbot.constants.Strings
 import com.example.chatbot.models.user.UserData
-
-data class HistoryCardData(
-    val chatType: String,
-    val title: String
-)
+import com.example.chatbot.viewmodels.ChatViewModel
+import com.example.chatbot.viewmodels.GlobalViewModel
 
 @Composable
-fun HomeView(userData: UserData?, navController: NavHostController, onSignOut: () -> Unit) {
+fun HomeView(userData: UserData?, navController: NavHostController, globalViewModel: GlobalViewModel,onSignOut: () -> Unit) {
 
-    val historyDataList = listOf(
-        HistoryCardData("chat", "Chat Title 1 asodjaosmd osdaij "),
-        HistoryCardData("speaking", "Speaking Title 1 asdoiajdpasmasdnasopdaso"),
-        HistoryCardData("chat", "Chat Title 2 aspdjasodkas asdnoaspkd"),
-        HistoryCardData("speaking", "Speaking Title 2 as doansp maspod")
-        // Add more items as needed
-    )
+    globalViewModel.GetConversations(userData = userData)
 
     var expanded by remember {
         mutableStateOf(false)
@@ -128,6 +120,7 @@ fun HomeView(userData: UserData?, navController: NavHostController, onSignOut: (
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 CardComponent(R.drawable.chat, Strings.homeChatWithBot) {
+
                     navController.navigate(Screens.chat)
                 }
                 CardComponent(R.drawable.speaking, Strings.homeTalkWithBot) {
@@ -160,10 +153,16 @@ fun HomeView(userData: UserData?, navController: NavHostController, onSignOut: (
             }
             LazyColumn(verticalArrangement = Arrangement.spacedBy(15.dp))
             {
-                items(historyDataList)
+                items(globalViewModel.historyConversation)
                 {
-                    HistoryCardTile(chatType = it.chatType, title = it.title)
+                    HistoryCardTile(chatType = it.chatType, title = it.title){
+                        navController.navigate(Screens.chat + "/${it.conversationID}")
+                    }
                 }
+            }
+            if (globalViewModel.historyConversation.isEmpty())
+            {
+                Text(text = "No History", color = Color.White, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
             }
         }
 

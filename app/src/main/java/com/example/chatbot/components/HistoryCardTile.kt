@@ -16,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,12 +32,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.chatbot.R
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryCardTile(chatType : String, title: String)
+fun HistoryCardTile(chatType : String, title: String, onClick: () -> Unit)
 {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -50,6 +53,9 @@ fun HistoryCardTile(chatType : String, title: String)
         colors = CardDefaults.cardColors(
             containerColor = Color(0xCC181818) // Set a semi-transparent gray color
         ),
+        onClick = {
+            onClick()
+        }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.padding(10.dp)) {
             Box(modifier = Modifier.background(color = colorResource(id = R.color.button_color)
@@ -65,7 +71,14 @@ fun HistoryCardTile(chatType : String, title: String)
                     )
             }
 
-            Text(text = title.substring(0,25) + "...", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(start = 15.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(start = 15.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             Box(
                 modifier = Modifier.fillMaxWidth()

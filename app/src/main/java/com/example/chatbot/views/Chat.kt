@@ -46,14 +46,21 @@ fun Chat(
     chatViewModel: ChatViewModel,
     conversation: List<ChatMessage>,
     navController: NavHostController,
-    userData: UserData?
+    userData: UserData?,
+    conversationId : String?
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val listState = rememberLazyListState()
 
+    conversationId?.let {
+        chatViewModel.GetChats(conversationId = conversationId)
+    }
+
     LaunchedEffect(conversation.size) {
         listState.animateScrollToItem(conversation.size)
+
     }
+
 
     Column(
         modifier = Modifier
@@ -111,7 +118,7 @@ fun Chat(
             },
             trailingIcon = {
                 IconButton(onClick = {
-                    chatViewModel.emitMessage()
+                    chatViewModel.emitMessage(userData = userData)
                 }) {
                     Icon(
                         Icons.Filled.Send, contentDescription = "Send",
