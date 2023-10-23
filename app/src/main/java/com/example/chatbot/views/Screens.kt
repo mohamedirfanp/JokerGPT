@@ -8,6 +8,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +30,7 @@ fun Screens(
     applicationContext: Context
 ) {
     val scope = rememberCoroutineScope()
-    NavHost(navController = navController, startDestination = Screens.landing) {
+    NavHost(navController = navController, startDestination = Screens.chat) {
         composable(route = Screens.home) {
             HomeView(
                 userData = googleAuthUiClient.getSignedInUser(),
@@ -51,7 +52,8 @@ fun Screens(
 
         composable(route = Screens.chat) {
             val chatViewModel = hiltViewModel<ChatViewModel>()
-            Chat(chatViewModel, navController)
+            val conversation = chatViewModel.chats.collectAsState()
+            Chat(chatViewModel, conversation.value, navController)
         }
 
         composable(route = Screens.landing) {
