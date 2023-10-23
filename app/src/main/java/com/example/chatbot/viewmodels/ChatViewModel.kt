@@ -1,5 +1,6 @@
 package com.example.chatbot.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,19 +22,27 @@ class ChatViewModel @Inject constructor(private val repository: Repository) : Vi
     private val _state = MutableStateFlow(listOf(ChatMessage.initConv))
     val chats = _state.asStateFlow()
 
+
+
     var message: String by mutableStateOf("")
 
     fun emitMessage() {
         val myChat = ChatMessage(content = message, role = Role.me)
         viewModelScope.launch {
             _state.emit(_state.value + myChat)
-            val response = repository.getResponse(ChatRequest(_state.value, "gpt-3.5-turbo"))
-            val botChat = ChatMessage(
-                content = response.choices[0].message.content.toString(),
-                role = Role.assistance
-            )
-            _state.emit(_state.value + botChat)
+            Log.d("CHATS", _state.value.toString())
+            try {
+                val response = repository.getResponse(ChatRequest(_state.value, "gpt-3.5-turbo"))
+
+                val botChat = ChatMessage(
+                    content = response.choices[0].message.content.toString(),
+                    role = Role.assistance
+                )
+                _state.emit(_state.value + botChat)
+                message = ""
+            } catch (e: Exception) {
+                Log.d("ERROR", e.message.toString())
+            }
         }
-        message = ""
     }
 }

@@ -53,7 +53,8 @@ fun Screens(
         composable(route = Screens.chat) {
             val chatViewModel = hiltViewModel<ChatViewModel>()
             val conversation = chatViewModel.chats.collectAsState()
-            Chat(chatViewModel, conversation.value, navController)
+
+            Chat(chatViewModel, conversation.value, navController,googleAuthUiClient.getSignedInUser())
         }
 
         composable(route = Screens.landing) {

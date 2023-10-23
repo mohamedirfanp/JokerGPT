@@ -34,7 +34,7 @@ fun ChatTile(chat: ChatMessage) {
                         bottomEnd = if (chat.role == Role.me) 0f else 48f
                     )
                 )
-                .background(Color.White)
+                .background(Color(0xEBE6E6E6))
                 .padding(16.dp)
         ) {
             Text(text = chat.content)

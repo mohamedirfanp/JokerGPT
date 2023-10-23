@@ -9,7 +9,7 @@ data class ChatMessage(
     companion object {
         val initConv = ChatMessage(
             content = "Hi there, how you doing?",
-            role = Role.assistance
+            role = Role.system
         )
     }
 }

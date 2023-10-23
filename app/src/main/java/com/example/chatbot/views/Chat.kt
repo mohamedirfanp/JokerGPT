@@ -37,6 +37,7 @@ import com.example.chatbot.components.TopBar
 import com.example.chatbot.constants.Screens
 import com.example.chatbot.constants.Strings
 import com.example.chatbot.models.chat.ChatMessage
+import com.example.chatbot.models.user.UserData
 import com.example.chatbot.viewmodels.ChatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -44,7 +45,8 @@ import com.example.chatbot.viewmodels.ChatViewModel
 fun Chat(
     chatViewModel: ChatViewModel,
     conversation: List<ChatMessage>,
-    navController: NavHostController
+    navController: NavHostController,
+    userData: UserData?
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val listState = rememberLazyListState()
