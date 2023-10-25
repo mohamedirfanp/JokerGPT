@@ -124,7 +124,7 @@ fun HomeView(userData: UserData?, navController: NavHostController, globalViewMo
                     navController.navigate(Screens.chat)
                 }
                 CardComponent(R.drawable.speaking, Strings.homeTalkWithBot) {
-
+                        navController.navigate(Screens.talk)
                 }
             }
         }

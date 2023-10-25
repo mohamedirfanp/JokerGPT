@@ -27,16 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor
-    (private val repository: Repository,
-     savedStateHandle: SavedStateHandle
+    (private val repository: Repository
 ) : ViewModel() {
-
-    init {
-        savedStateHandle.get<String>(Strings.PARAM_CONVERSATION_ID)?.let{
-            Log.d("PARAM", it)
-        }
-
-    }
 
     private val _state = MutableStateFlow(listOf(ChatMessage.initConv))
 
@@ -50,6 +42,12 @@ class ChatViewModel @Inject constructor
 
     private var currentConversationId : String? = null
 
+    fun removeMsg() {
+        viewModelScope.launch {
+            _state.emit(listOf(ChatMessage.initConv))
+        }
+    }
+
     fun emitMessage(userData: UserData?)
     {
         val myChat = ChatMessage(content = message, role = Role.me)
@@ -57,7 +55,7 @@ class ChatViewModel @Inject constructor
         viewModelScope.launch {
             _state.emit(_state.value + myChat)
             try {
-                Log.d("DATA PASSING", _state.value.toString())
+
                 val response = repository.getResponse(ChatRequest(messages = _state.value, "gpt-3.5-turbo"))
 
                 val botChat = ChatMessage(

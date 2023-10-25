@@ -1,6 +1,7 @@
 package com.example.chatbot.views
 
 import android.app.Activity.RESULT_OK
+import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -17,23 +18,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.chatbot.constants.Screens
 import com.example.chatbot.util.GoogleAuthUiClient
 import com.example.chatbot.viewmodels.ChatViewModel
 import com.example.chatbot.viewmodels.GlobalViewModel
 import com.example.chatbot.viewmodels.SignInViewModel
+import com.example.chatbot.viewmodels.TalkViewModel
+import com.example.chatbot.viewmodels.VoiceToTextParser
 import kotlinx.coroutines.launch
 
 @Composable
 fun Screens(
     navController: NavHostController,
     googleAuthUiClient: GoogleAuthUiClient,
-    applicationContext: Context
+    applicationContext: Context,
+    application: Application
 ) {
     val scope = rememberCoroutineScope()
     val chatViewModel = hiltViewModel<ChatViewModel>()
     val globalViewModel = viewModel<GlobalViewModel>()
+    val talkViewModel = hiltViewModel<TalkViewModel>()
+    val voiceToTextParser = VoiceToTextParser(application, talkViewModel, applicationContext)
     NavHost(navController = navController, startDestination = Screens.landing) {
         composable(route = Screens.home) {
             HomeView(
@@ -58,6 +63,7 @@ fun Screens(
         composable(route = Screens.chat + "/{conversationId}",
                 ) {
 
+//            chatViewModel.removeMsg()
             val conversation = chatViewModel.chats.collectAsState()
             val conversationId = it.arguments?.getString("conversationId")
 
@@ -66,6 +72,7 @@ fun Screens(
         }
 
         composable(route = Screens.chat){
+//            chatViewModel.removeMsg()
             val conversation = chatViewModel.chats.collectAsState()
             Chat(
                 chatViewModel = chatViewModel,
@@ -127,5 +134,9 @@ fun Screens(
                 }
             )
         }
+
+         composable(route = Screens.talk) {
+             TalkView(navController = navController, voiceToTextParser = voiceToTextParser)
+         }
     }
 }

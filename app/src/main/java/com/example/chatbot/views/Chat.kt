@@ -61,7 +61,6 @@ fun Chat(
 
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
